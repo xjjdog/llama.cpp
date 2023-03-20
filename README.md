@@ -1,166 +1,127 @@
 # llama.cpp
 
+
 [![Actions Status](https://github.com/ggerganov/llama.cpp/workflows/CI/badge.svg)](https://github.com/ggerganov/llama.cpp/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Inference of [LLaMA](https://arxiv.org/abs/2302.13971) model in pure C/C++
+C++ 实现的 [LLaMA](https://arxiv.org/abs/2302.13971) 模型。
 
-**Hot topics:**
+**热门主题:**
 
-- [Added Alpaca support](https://github.com/ggerganov/llama.cpp#instruction-mode-with-alpaca)
-- Cache input prompts for faster initialization: https://github.com/ggerganov/llama.cpp/issues/64
-- Create a `llama.cpp` logo: https://github.com/ggerganov/llama.cpp/issues/105
+- [下载模型](https://github.com/ggerganov/llama.cpp#instruction-mode-with-alpaca) 本仓库只是一点点代码，需要下载模型。
+- 输出性能优化: https://github.com/ggerganov/llama.cpp/issues/64
+- 创建一个 `llama.cpp` logo: https://github.com/ggerganov/llama.cpp/issues/105
 
-## Description
+## 描述
 
-The main goal is to run the model using 4-bit quantization on a MacBook
+使用普通的Macbook，Linux，甚至Docker、树莓派等，就可以运行类比于 ChatGPT 的对话模型。
 
-- Plain C/C++ implementation without dependencies
-- Apple silicon first-class citizen - optimized via ARM NEON
-- AVX2 support for x86 architectures
-- Mixed F16 / F32 precision
-- 4-bit quantization support
-- Runs on the CPU
 
-This was [hacked in an evening](https://github.com/ggerganov/llama.cpp/issues/33#issuecomment-1465108022) - I have no idea if it works correctly.
-Please do not make conclusions about the models based on the results from this implementation.
-For all I know, it can be completely wrong. This project is for educational purposes.
-New features will probably be added mostly through community contributions.
+- 纯C++代码，代码少，而且没有任何依赖
+- Apple 的M1 芯片也可以跑，而且有性能优化
+- x86架构拥有 AVX2 支持
+- 在 CPU 上就能跑，不需要 GPU
 
-Supported platforms:
+支持的平台:
 
 - [X] Mac OS
 - [X] Linux
 - [X] Windows (via CMake)
 - [X] Docker
 
----
 
-Here is a typical run using LLaMA-7B:
+模型下载地址：
 
-```java
-make -j && ./main -m ./models/7B/ggml-model-q4_0.bin -p "Building a website can be done in 10 simple steps:" -n 512
-I llama.cpp build info:
-I UNAME_S:  Darwin
-I UNAME_P:  arm
-I UNAME_M:  arm64
-I CFLAGS:   -I.              -O3 -DNDEBUG -std=c11   -fPIC -pthread -DGGML_USE_ACCELERATE
-I CXXFLAGS: -I. -I./examples -O3 -DNDEBUG -std=c++11 -fPIC -pthread
-I LDFLAGS:   -framework Accelerate
-I CC:       Apple clang version 14.0.0 (clang-1400.0.29.202)
-I CXX:      Apple clang version 14.0.0 (clang-1400.0.29.202)
-
-make: Nothing to be done for `default'.
-main: seed = 1678486056
-llama_model_load: loading model from './models/7B/ggml-model-q4_0.bin' - please wait ...
-llama_model_load: n_vocab = 32000
-llama_model_load: n_ctx   = 512
-llama_model_load: n_embd  = 4096
-llama_model_load: n_mult  = 256
-llama_model_load: n_head  = 32
-llama_model_load: n_layer = 32
-llama_model_load: n_rot   = 128
-llama_model_load: f16     = 2
-llama_model_load: n_ff    = 11008
-llama_model_load: ggml ctx size = 4529.34 MB
-llama_model_load: memory_size =   512.00 MB, n_mem = 16384
-llama_model_load: .................................... done
-llama_model_load: model size =  4017.27 MB / num tensors = 291
-
-main: prompt: 'Building a website can be done in 10 simple steps:'
-main: number of tokens in prompt = 15
-     1 -> ''
-  8893 -> 'Build'
-   292 -> 'ing'
-   263 -> ' a'
-  4700 -> ' website'
-   508 -> ' can'
-   367 -> ' be'
-  2309 -> ' done'
-   297 -> ' in'
- 29871 -> ' '
- 29896 -> '1'
- 29900 -> '0'
-  2560 -> ' simple'
-  6576 -> ' steps'
- 29901 -> ':'
-
-sampling parameters: temp = 0.800000, top_k = 40, top_p = 0.950000
-
-
-Building a website can be done in 10 simple steps:
-1) Select a domain name and web hosting plan
-2) Complete a sitemap
-3) List your products
-4) Write product descriptions
-5) Create a user account
-6) Build the template
-7) Start building the website
-8) Advertise the website
-9) Provide email support
-10) Submit the website to search engines
-A website is a collection of web pages that are formatted with HTML. HTML is the code that defines what the website looks like and how it behaves.
-The HTML code is formatted into a template or a format. Once this is done, it is displayed on the user's browser.
-The web pages are stored in a web server. The web server is also called a host. When the website is accessed, it is retrieved from the server and displayed on the user's computer.
-A website is known as a website when it is hosted. This means that it is displayed on a host. The host is usually a web server.
-A website can be displayed on different browsers. The browsers are basically the software that renders the website on the user's screen.
-A website can also be viewed on different devices such as desktops, tablets and smartphones.
-Hence, to have a website displayed on a browser, the website must be hosted.
-A domain name is an address of a website. It is the name of the website.
-The website is known as a website when it is hosted. This means that it is displayed on a host. The host is usually a web server.
-A website can be displayed on different browsers. The browsers are basically the software that renders the website on the user’s screen.
-A website can also be viewed on different devices such as desktops, tablets and smartphones. Hence, to have a website displayed on a browser, the website must be hosted.
-A domain name is an address of a website. It is the name of the website.
-A website is an address of a website. It is a collection of web pages that are formatted with HTML. HTML is the code that defines what the website looks like and how it behaves.
-The HTML code is formatted into a template or a format. Once this is done, it is displayed on the user’s browser.
-A website is known as a website when it is hosted
-
-main: mem per token = 14434244 bytes
-main:     load time =  1332.48 ms
-main:   sample time =  1081.40 ms
-main:  predict time = 31378.77 ms / 61.41 ms per token
-main:    total time = 34036.74 ms
+```
+curl -o ggml-alpaca-7b-q4.bin -C - https://gateway.estuary.tech/gw/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
+curl -o ggml-alpaca-7b-q4.bin -C - https://ipfs.io/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
+curl -o ggml-alpaca-7b-q4.bin -C - https://cloudflare-ipfs.com/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
 ```
 
-And here is another demo of running both LLaMA-7B and [whisper.cpp](https://github.com/ggerganov/whisper.cpp) on a single M1 Pro MacBook:
+---
+
+那么，这个工具要怎么用呢？
+超级简单。
+
+首先，将代码clone到本地。
+
+```bash
+git clone https://github.com/ggerganov/llama.cpp.git
+```
+
+然后，进入到llama.cpp目录。
+
+```bash
+cd llama.cpp
+```
+
+编译代码。
+
+```bash
+make
+```
+
+生成后的文件名称叫做main，以后，我们只需要运行 `./main`即可。
+
+最重要的一步，你需要下载一个数据模型。否则llama是不知道加载什么数据来进行计算的。为了测试，我们下载一个最小的。这个文件大小有3.9G，你需要相应大小的内存预留。
+
+```bash
+curl -o ggml-alpaca-7b-q4.bin -C - https://gateway.estuary.tech/gw/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
+```
+
+最后，我们就可以指定这个模型，来进行对话输出了。
+
+```java
+./main -m ./ggml-alpaca-7b-q4.bin -p "Will the future be female?" -n 512 --color
+```
+
+- m 指定的是模型的位置。
+- p 是对话或者问题。比如这里，我问我是否能够吃狗肉!
+- n 指定的是输出的文字数量，默认是128。
+- --color 输出彩色内容。
+
+
+下面是一些输出。首先会将输入进行切分，然后生成内容，最后将耗时打印。
+```java
+% ./main -m ./ggml-alpaca-7b-q4.bin -p "Can i eat dog?" -n 512 --color
+
+No you cannot! Eating dogs is illegal and against the law. It would be considered animal abuse, so please don’t do it under any circumstances…unless you are a cannibal
+
+main: mem per token = 14368644 bytes
+main:     load time =   743.12 ms
+main:   sample time =   455.50 ms
+main:  predict time = 46903.35 ms / 91.79 ms per token
+main:    total time = 48455.85 ms
+```
+
+在Macbook Pro M1 上运行的视频 [whisper.cpp](https://github.com/ggerganov/whisper.cpp)。
 
 https://user-images.githubusercontent.com/1991296/224442907-7693d4be-acaa-4e01-8b4f-add84093ffff.mp4
 
-## Usage
+## 交互模式
 
-Here are the step for the LLaMA-7B model:
+如果你想要和ChatGPT一样有对话能力的话，也是可以的。需要加上 `-i` 参数，当然，也可以使用 `-r User:`参数输出一个提示符。
 
-```bash
-# build this repo
-git clone https://github.com/ggerganov/llama.cpp
-cd llama.cpp
-make
+比如：
 
-# obtain the original LLaMA model weights and place them in ./models
-ls ./models
-65B 30B 13B 7B tokenizer_checklist.chk tokenizer.model
-
-# install Python dependencies
-python3 -m pip install torch numpy sentencepiece
-
-# convert the 7B model to ggml FP16 format
-python3 convert-pth-to-ggml.py models/7B/ 1
-
-# quantize the model to 4-bits
-python3 quantize.py 7B
-
-# run the inference
-./main -m ./models/7B/ggml-model-q4_0.bin -n 128
+```java
+./main -m ./ggml-alpaca-7b-q4.bin -p "Will the future be female?" -n 128 --color -i -r "User:"
 ```
 
-Currently, it's best to use Python 3.9 or Python 3.10, as `sentencepiece` has not yet published a wheel for Python 3.11.
+## 授课模式
 
-When running the larger models, make sure you have enough disk space to store all the intermediate files.
+所谓授课模式，就是提供一个按照顺序输出的文件列表，让电脑按照顺序把答案输出。
+如果liyanhong使用这种模式，而不是ppt，估计效果会更好。
 
-### Memory/Disk Requirements
+比如：
 
-As the models are currently fully loaded into memory, you will need adequate disk space to save them
-and sufficient RAM to load them. At the moment, memory and disk requirements are the same.
+```bash
+./main -m ./models/13B/ggml-model-q4_0.bin -n 256 --repeat_penalty 1.0 --color -i -r "User:" -f prompts/chat-with-bob.txt
+```
+
+## 内存需求
+
+内存的需求取决于你使用的模型。我们的测试使用的都是最简单的模型，所以4GB就够了。如果想要更精细的输出，你的内存需要更大一些。
 
 | model | original size | quantized size (4-bit) |
 |-------|---------------|------------------------|
@@ -169,105 +130,11 @@ and sufficient RAM to load them. At the moment, memory and disk requirements are
 | 30B   | 60 GB         | 19.5 GB                |
 | 65B   | 120 GB        | 38.5 GB                |
 
-### Interactive mode
+## Android
 
-If you want a more ChatGPT-like experience, you can run in interactive mode by passing `-i` as a parameter.
-In this mode, you can always interrupt generation by pressing Ctrl+C and enter one or more lines of text which will be converted into tokens and appended to the current context. You can also specify a *reverse prompt* with the parameter `-r "reverse prompt string"`. This will result in user input being prompted whenever the exact tokens of the reverse prompt string are encountered in the generation. A typical use is to use a prompt which makes LLaMa emulate a chat between multiple users, say Alice and Bob, and pass `-r "Alice:"`.
+你甚至可以在Android上跑起来。如果你的内存够大，那么完全可以做一个小型对话机器人，还是本地的！
 
-Here is an example few-shot interaction, invoked with the command
-```
-./main -m ./models/13B/ggml-model-q4_0.bin -n 256 --repeat_penalty 1.0 --color -i -r "User:" -f prompts/chat-with-bob.txt
-
-```
-Note the use of `--color` to distinguish between user input and generated text.
-
-![image](https://user-images.githubusercontent.com/1991296/224575029-2af3c7dc-5a65-4f64-a6bb-517a532aea38.png)
-
-### Instruction mode with Alpaca
-
-First, download the `ggml` Alpaca model into the `./models` folder:
-
-```
-# use one of these
-# NOTE: these are copied from the alpaca.cpp repo - not sure how long these will work
-# TODO: add a script to simplify the download
-curl -o ggml-alpaca-7b-q4.bin -C - https://gateway.estuary.tech/gw/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
-curl -o ggml-alpaca-7b-q4.bin -C - https://ipfs.io/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
-curl -o ggml-alpaca-7b-q4.bin -C - https://cloudflare-ipfs.com/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
-```
-
-Now run the `main` tool like this:
-
-```
-./main -m ./models/ggml-alpaca-7b-q4.bin --color -f ./prompts/alpaca.txt -ins
-```
-
-Sample run:
-
-```
-== Running in interactive mode. ==
- - Press Ctrl+C to interject at any time.
- - Press Return to return control to LLaMa.
- - If you want to submit another line, end your input in '\'.
-
- Below is an instruction that describes a task. Write a response that appropriately completes the request.
-
-> How many letters are there in the English alphabet?
-There 26 letters in the English Alphabet
-> What is the most common way of transportation in Amsterdam?
-The majority (54%) are using public transit. This includes buses, trams and metros with over 100 lines throughout the city which make it very accessible for tourists to navigate around town as well as locals who commute by tram or metro on a daily basis
-> List 5 words that start with "ca".                                                                       
-cadaver, cauliflower, cabbage (vegetable), catalpa (tree) and Cailleach.
-> 
-```
-
-### Android
-
-You can easily run `llama.cpp` on Android device with [termux](https://play.google.com/store/apps/details?id=com.termux).
-First, obtain the [Android NDK](https://developer.android.com/ndk) and then build with CMake:
-```
-$ mkdir build-android
-$ cd build-android
-$ export NDK=<your_ndk_directory>
-$ cmake -DCMAKE_TOOLCHAIN_FILE=$NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-23 -DCMAKE_C_FLAGS=-march=armv8.4a+dotprod ..
-$ make
-```
-Install [termux](https://play.google.com/store/apps/details?id=com.termux) on your device and run `termux-setup-storage` to get access to your SD card.
-Finally, copy the `llama` binary and the model files to your device storage. Here is a demo of an interactive session running on Pixel 5 phone:
-
-https://user-images.githubusercontent.com/271616/225014776-1d567049-ad71-4ef2-b050-55b0b3b9274c.mp4
-
-### Docker
-
-#### Prerequisites
-* Docker must be installed and running on your system.
-* Create a folder to store big models & intermediate files (in ex. im using /llama/models)
-
-#### Images
-We have two Docker images available for this project:
-
-1. `ghcr.io/ggerganov/llama.cpp:full`: This image includes both the main executable file and the tools to convert LLaMA models into ggml and convert into 4-bit quantization.
-2. `ghcr.io/ggerganov/llama.cpp:light`: This image only includes the main executable file.
-
-#### Usage
-
-The easiest way to download the models, convert them to ggml and optimize them is with the --all-in-one command which includes the full docker image.
-
- ```bash
-docker run -v /llama/models:/models ghcr.io/ggerganov/llama.cpp:full --all-in-one "/models/" 7B
-```
-
-On complete, you are ready to play!
-
-```bash
-docker run -v /llama/models:/models ghcr.io/ggerganov/llama.cpp:full --run -m /models/7B/ggml-model-q4_0.bin -p "Building a website can be done in 10 simple steps:" -n 512
-```
-
-or with light image:
-
-```bash
-docker run -v /llama/models:/models ghcr.io/ggerganov/llama.cpp:light -m /models/7B/ggml-model-q4_0.bin -p "Building a website can be done in 10 simple steps:" -n 512
-```
+后面如果解决了部分加载的问题，Android的嵌入式应用会非常方便。
 
 ## Limitations
 
