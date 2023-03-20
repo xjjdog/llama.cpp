@@ -4,17 +4,17 @@
 [![Actions Status](https://github.com/ggerganov/llama.cpp/workflows/CI/badge.svg)](https://github.com/ggerganov/llama.cpp/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-C++ 实现的 [LLaMA](https://arxiv.org/abs/2302.13971) 模型。
+这是一个 C++ 实现的 [LLaMA](https://arxiv.org/abs/2302.13971) 对话库。Java 和 Python的同学也不要被吓倒，它的使用超级简单。如果你遇到什么问题，欢迎到公众号（xjjdog）提问。
 
-**热门主题:**
+**热门问题:**
 
-- [下载模型](https://github.com/ggerganov/llama.cpp#instruction-mode-with-alpaca) 本仓库只是一点点代码，需要下载模型。
+- 本仓库只是一点点代码。想要完整运行，需要 [下载模型](https://github.com/ggerganov/llama.cpp#instruction-mode-with-alpaca)。
 - 输出性能优化: https://github.com/ggerganov/llama.cpp/issues/64
 - 创建一个 `llama.cpp` logo: https://github.com/ggerganov/llama.cpp/issues/105
 
 ## 描述
 
-使用普通的Macbook，Linux，甚至Docker、树莓派等，就可以运行类比于 ChatGPT 的对话模型。
+和ChatGPT对比起来，llama的好处是：使用普通的Macbook，Linux，甚至Docker、树莓派等，就可以运行类比于 ChatGPT 的对话模型。
 
 
 - 纯C++代码，代码少，而且没有任何依赖
@@ -30,6 +30,7 @@ C++ 实现的 [LLaMA](https://arxiv.org/abs/2302.13971) 模型。
 - [X] Docker
 
 
+
 模型下载地址：
 
 ```
@@ -40,8 +41,7 @@ curl -o ggml-alpaca-7b-q4.bin -C - https://cloudflare-ipfs.com/ipfs/QmQ1bf2BTnYx
 
 ---
 
-那么，这个工具要怎么用呢？
-超级简单。
+那么，这个工具要怎么用呢？ 超级简单。
 
 首先，将代码clone到本地。
 
@@ -61,9 +61,9 @@ cd llama.cpp
 make
 ```
 
-生成后的文件名称叫做main，以后，我们只需要运行 `./main`即可。
+生成后的文件名称叫做`main`，以后，我们只需要运行 `./main`即可。
 
-最重要的一步，你需要下载一个数据模型。否则llama是不知道加载什么数据来进行计算的。为了测试，我们下载一个最小的。这个文件大小有3.9G，你需要相应大小的内存预留。
+最重要的一步，你需要下载一个数据模型。否则 llama 是不知道加载什么数据来进行计算的。为了测试，我们下载一个最小的。这个文件大小有3.9G，你需要相应大小的内存预留。
 
 ```bash
 curl -o ggml-alpaca-7b-q4.bin -C - https://gateway.estuary.tech/gw/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
@@ -82,6 +82,7 @@ curl -o ggml-alpaca-7b-q4.bin -C - https://gateway.estuary.tech/gw/ipfs/QmQ1bf2B
 
 
 下面是一些输出。首先会将输入进行切分，然后生成内容，最后将耗时打印。
+
 ```java
 % ./main -m ./ggml-alpaca-7b-q4.bin -p "Can i eat dog?" -n 512 --color
 
@@ -135,6 +136,9 @@ https://user-images.githubusercontent.com/1991296/224442907-7693d4be-acaa-4e01-8
 你甚至可以在Android上跑起来。如果你的内存够大，那么完全可以做一个小型对话机器人，还是本地的！
 
 后面如果解决了部分加载的问题，Android的嵌入式应用会非常方便。
+
+
+更多的内容，可以参考 https://github.com/ggerganov/llama.cpp
 
 ## Limitations
 
